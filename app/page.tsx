@@ -1,13 +1,21 @@
-import { authOptions } from "@/auth";
-import { Button } from "@/components/ui/button";
-import { getServerSession } from "next-auth";
+"use client";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  console.log(session)
+import { useSession, signIn, signOut } from "next-auth/react";
+
+export default function Home() {
+  const { data: session } = useSession();
+  if (session) {
+    return (
+      <>
+        Signed in as {session?.user?.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
   return (
-    <div>
-      <Button>Click me</Button>
-    </div>
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
   );
 }

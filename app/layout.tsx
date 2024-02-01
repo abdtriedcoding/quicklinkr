@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import SessionProvider from "@/components/providers/auth-provider";
+import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <FirebaseAuthProvider>{children}</FirebaseAuthProvider>
+        </body>
       </html>
     </SessionProvider>
   );

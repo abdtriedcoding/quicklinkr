@@ -31,6 +31,7 @@ const Page = () => {
     newWindow?.focus();
   };
 
+  console.log(session);
   if (status === "authenticated") {
     return (
       <div>

@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/firebase/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
+import { UserProps } from "@/types";
 
 export async function getSession() {
   return await getServerSession(authOptions);
@@ -27,7 +28,7 @@ export default async function getCurrentUser() {
     return {
       ...currentUser,
       uid: session?.user?.id,
-    };
+    } as UserProps;
   } catch (error) {
     console.error("Error fetching current user:", error);
     return null;

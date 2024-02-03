@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20">
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Link href="/" className="flex z-40 font-semibold">
-            <span>quill.</span>
+            <span>quicklinkr.</span>
           </Link>
 
           <div className="hidden items-center space-x-4 sm:flex">

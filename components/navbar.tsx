@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "./ui/button";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import UserMenu from "./user-menu";
 
 const Navbar = async () => {
   const user = await getCurrentUser();
@@ -55,6 +56,7 @@ const Navbar = async () => {
                 >
                   Dashboard
                 </Link>
+                <UserMenu />
               </>
             )}
           </div>

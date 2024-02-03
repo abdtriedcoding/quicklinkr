@@ -11,7 +11,7 @@ const FeatureSection = () => {
               Start creating link in seconds
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Creating sharable links of your documents has never been easier
+              Creating shearable links of your documents has never been easier
               than with Quicklinkr.
             </p>
           </div>
@@ -44,7 +44,7 @@ const FeatureSection = () => {
                 Upload your PDF file
               </span>
               <span className="mt-2 text-zinc-700">
-                We&apos;ll process your file and make a sharable link for you.
+                We&apos;ll process your file and make a shearable link for you.
               </span>
             </div>
           </li>

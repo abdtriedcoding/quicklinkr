@@ -1,11 +1,15 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { buttonVariants } from "./ui/button";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-import UserMenu from "./user-menu";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+import UserMenu from "@/components/user-menu";
+import SignIn from "@/components/navbar/signin";
+import GetStarted from "@/components/navbar/get-started";
+import { buttonVariants } from "@/components/ui/button";
 
 const Navbar = async () => {
-  const user = await getCurrentUser();
+  const session = await getServerSession(authOptions);
+
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20">
@@ -15,7 +19,7 @@ const Navbar = async () => {
           </Link>
 
           <div className="hidden items-center space-x-4 sm:flex">
-            {!user ? (
+            {!session?.user ? (
               <>
                 <Link
                   href="/"
@@ -26,24 +30,8 @@ const Navbar = async () => {
                 >
                   Pricing
                 </Link>
-
-                <Link
-                  href="/"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "sm",
-                  })}
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/"
-                  className={buttonVariants({
-                    size: "sm",
-                  })}
-                >
-                  Get started <ArrowRight className="ml-1.5 h-5 w-5" />
-                </Link>
+                <SignIn />
+                <GetStarted />
               </>
             ) : (
               <>

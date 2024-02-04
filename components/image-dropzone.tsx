@@ -31,7 +31,7 @@ export default function ImageDropzone() {
         const isFileTooLarge =
           fileRejections.length > 0 && fileRejections[0].file.size > maxSize;
         return (
-          <section className="pt-4">
+          <>
             <div
               {...getRootProps()}
               className={cn(
@@ -51,7 +51,7 @@ export default function ImageDropzone() {
                 File is too large
               </div>
             )}
-          </section>
+          </>
         );
       }}
     </DropzoneComponent>

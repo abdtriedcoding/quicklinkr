@@ -15,6 +15,7 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { COLOR_EXTENSION_MAP } from "@/constant";
 
 export type FileType = {
   id: string;
@@ -37,7 +38,7 @@ export const columns: ColumnDef<FileType>[] = [
           <FileIcon
             extension={extension}
             {...defaultStyles.docx}
-            // @ts-ignore
+            labelColor={COLOR_EXTENSION_MAP[extension]} // @ts-ignore
             {...defaultStyles[extension]}
           />
         </div>
@@ -50,6 +51,13 @@ export const columns: ColumnDef<FileType>[] = [
   },
   {
     accessorKey: "timestamp",
+    cell: ({ renderValue, ...props }) => {
+      return (
+        <span className="pl-4">
+          {(renderValue() as Date).toLocaleDateString()}
+        </span>
+      );
+    },
     header: ({ column }) => {
       return (
         <Button

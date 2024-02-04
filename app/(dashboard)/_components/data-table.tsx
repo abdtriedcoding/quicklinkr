@@ -56,10 +56,10 @@ export function DataTable<TData, TValue>({
       <h1 className="font-semibold text-lg">Your all uploaded files</h1>
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            placeholder="Filter by filename..."
+            value={(table.getColumn("filename")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("filename")?.setFilterValue(event.target.value)
             }
             className="max-w-lg"
           />

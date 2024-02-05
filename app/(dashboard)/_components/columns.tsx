@@ -1,9 +1,9 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import prettyBytes from "pretty-bytes";
+import { FileIcon, defaultStyles } from "react-file-icon";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,51 +12,80 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+export type FileType = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  type: string;
+  filename: string;
+  timestamp: Date;
+  size: number;
+  downloadUrl: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<FileType>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "type",
+    header: "type",
+    cell: ({ renderValue, ...props }) => {
+      const type = renderValue() as string;
+      const extension: string = type?.split("/")[1];
+      return (
+        <div className="w-10">
+          <FileIcon
+            extension={extension}
+            // labelColor={COLOR_EXTENSION_MAP[extension]}
+            // @ts-ignore
+            {...defaultStyles[extension]}
+          />
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "email",
+    accessorKey: "filename",
+    header: "Filename",
+  },
+  {
+    accessorKey: "timestamp",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Date Added
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+    accessorKey: "size",
+    header: "Size",
+    cell: ({ renderValue, ...props }) => {
+      return <span>{prettyBytes(renderValue() as number)}</span>;
     },
+  },
+  {
+    accessorKey: "downloadURL",
+    header: "Link",
+    cell: ({ renderValue, ...props }) => (
+      <Link
+        href={renderValue() as string}
+        target="_blank"
+        className="underline text-blue-500 hover:text-blue-600"
+      >
+        Download
+      </Link>
+    ),
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const file = row.original;
 
       return (
         <DropdownMenu>
@@ -69,13 +98,12 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(file.downloadUrl)}
             >
-              Copy payment ID
+              Copy Link
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            {/* Todo---> Add delete button */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

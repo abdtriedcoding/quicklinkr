@@ -1,26 +1,69 @@
 "use client";
 
+import { db, storage } from "@/firebase/firebase-config";
 import { cn } from "@/lib/utils";
+import {
+  collection,
+  doc,
+  serverTimestamp,
+  writeBatch,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import DropzoneComponent from "react-dropzone";
 
 export default function ImageDropzone() {
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
   const maxSize = 20971520; //20MB max
 
-  const onDrop = (acceptedFile: File[]) => {
+  const onDrop = async (acceptedFile: File[]) => {
     acceptedFile.forEach((file) => {
       const reader = new FileReader();
       reader.onabort = () => console.log("file reading was aborted");
       reader.onerror = () => console.log("file reading has failed");
 
       reader.onload = async () => {
-        await console.log(file);
+        await uploadFile(file);
       };
       reader.readAsArrayBuffer(file);
     });
   };
 
+  const uploadFile = async (selectedFile: File) => {
+    if (!session?.user || loading) return;
+    setLoading(true);
+    const batch = writeBatch(db);
+
+    const newFileData = {
+      filename: selectedFile.name,
+      createdAt: serverTimestamp(),
+      type: selectedFile.type,
+      size: selectedFile.size,
+      downloadURL: null,
+    };
+
+    const docRef = doc(collection(db, "users", session.user.id, "files"));
+    batch.set(docRef, newFileData);
+    const imageRef = ref(
+      storage,
+      `users/${session.user.id}/files/${docRef.id}`
+    );
+    await uploadBytes(imageRef, selectedFile);
+    const downloadURL = await getDownloadURL(imageRef);
+    batch.update(docRef, { downloadURL });
+    await batch.commit();
+    setLoading(false);
+  };
+
   return (
-    <DropzoneComponent minSize={0} maxSize={maxSize} onDrop={onDrop}>
+    <DropzoneComponent
+      disabled={loading}
+      minSize={0}
+      maxSize={maxSize}
+      onDrop={onDrop}
+    >
       {({
         getRootProps,
         getInputProps,
@@ -38,7 +81,8 @@ export default function ImageDropzone() {
                 "w-full h-52 flex justify-center items-center p-5 border border-dashed rounded-lg text-center cursor-pointer",
                 isDragActive
                   ? "bg-[#035ffe] text-white animate-pulse"
-                  : "bg-slate-100/50 dark:bg-slate=800/80 text-slate-400"
+                  : "bg-slate-100/50 dark:bg-slate=800/80 text-slate-400",
+                loading && "cursor-not-allowed"
               )}
             >
               <input {...getInputProps()} />

@@ -36,7 +36,7 @@ export const columns: ColumnDef<FileType>[] = [
         <div className="w-10">
           <FileIcon
             extension={extension}
-            // labelColor={COLOR_EXTENSION_MAP[extension]}
+            {...defaultStyles.docx}
             // @ts-ignore
             {...defaultStyles[extension]}
           />
@@ -70,17 +70,20 @@ export const columns: ColumnDef<FileType>[] = [
     },
   },
   {
-    accessorKey: "downloadURL",
+    accessorKey: "downloadUrl",
     header: "Link",
-    cell: ({ renderValue, ...props }) => (
-      <Link
-        href={renderValue() as string}
-        target="_blank"
-        className="underline text-blue-500 hover:text-blue-600"
-      >
-        Download
-      </Link>
-    ),
+    cell: ({ renderValue, ...props }) => {
+      return (
+        <Link
+          download
+          href={renderValue() as string}
+          target="_blank"
+          className="underline cursor-pointer text-blue-500 hover:text-blue-600"
+        >
+          Download
+        </Link>
+      );
+    },
   },
   {
     id: "actions",

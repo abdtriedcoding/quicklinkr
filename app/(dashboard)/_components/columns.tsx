@@ -21,9 +21,9 @@ export type FileType = {
   id: string;
   type: string;
   filename: string;
-  timestamp: Date;
+  createdAt: Date;
   size: number;
-  downloadUrl: string;
+  downloadURL: string;
 };
 
 export const columns: ColumnDef<FileType>[] = [
@@ -50,7 +50,7 @@ export const columns: ColumnDef<FileType>[] = [
     header: "Filename",
   },
   {
-    accessorKey: "timestamp",
+    accessorKey: "createdAt",
     cell: ({ renderValue, ...props }) => {
       return (
         <span className="pl-4">
@@ -78,7 +78,7 @@ export const columns: ColumnDef<FileType>[] = [
     },
   },
   {
-    accessorKey: "downloadUrl",
+    accessorKey: "downloadURL",
     header: "Link",
     cell: ({ renderValue, ...props }) => {
       return (
@@ -109,7 +109,7 @@ export const columns: ColumnDef<FileType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(file.downloadUrl)}
+              onClick={() => navigator.clipboard.writeText(file.downloadURL)}
             >
               Copy Link
             </DropdownMenuItem>

@@ -27,7 +27,7 @@ export default async function getCurrentUser() {
 
     return {
       ...currentUser,
-      uid: session?.user?.id,
+      id: session?.user?.id,
     } as UserProps;
   } catch (error) {
     console.error("Error fetching current user:", error);

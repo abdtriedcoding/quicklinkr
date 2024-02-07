@@ -1,27 +1,29 @@
-import { db } from "@/firebase/firebase-config";
 import { collection, getDocs } from "firebase/firestore";
-import { User } from "next-auth";
-import { FileType } from "../(dashboard)/_components/columns";
 import { UserProps } from "@/types";
+import { db } from "@/firebase/firebase-config";
+import { FileType } from "../(dashboard)/_components/columns";
 
 export const getAllFiles = async (user: UserProps) => {
   if (!user) {
-    throw new Error("Not authenticated");
+    throw new Error("User not authenticated");
   }
 
   const collectionRef = collection(db, `users/${user.id}/files`);
 
   try {
     const querySnapshot = await getDocs(collectionRef);
-    const documents: FileType[] = [];
-
-    querySnapshot.forEach((doc) => {
-      documents.push({ id: doc.id, ...doc.data() } as FileType);
+    const files: FileType[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: new Date(data.createdAt.seconds * 1000).toLocaleDateString(),
+      } as FileType;
     });
 
-    return documents;
+    return files;
   } catch (error) {
-    console.error("Error getting documents: ", error);
-    throw error;
+    console.error("Error getting documents:", error);
+    throw new Error("Failed to retrieve files");
   }
 };

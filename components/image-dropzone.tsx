@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   writeBatch,
 } from "firebase/firestore";
@@ -35,8 +36,18 @@ export default function ImageDropzone() {
   const uploadFile = async (selectedFile: File) => {
     if (!session?.user || loading) return;
     setLoading(true);
-    const toastId = toast.loading("uploading...")
+    const toastId = toast.loading("uploading...");
     const batch = writeBatch(db);
+
+    const userRef = doc(db, "users", session.user.id);
+    const userDoc = await getDoc(userRef);
+
+    // Calculate the new storageUsed by adding the size of the selected file
+    const storageUsed = userDoc?.data()?.storageUsed;
+    const newSize =
+      storageUsed !== undefined
+        ? storageUsed + selectedFile.size
+        : selectedFile.size;
 
     const newFileData = {
       filename: selectedFile.name,
@@ -55,10 +66,12 @@ export default function ImageDropzone() {
     await uploadBytes(imageRef, selectedFile);
     const downloadURL = await getDownloadURL(imageRef);
     batch.update(docRef, { downloadURL });
+
+    batch.update(userRef, { storageUsed: newSize });
     await batch.commit();
-    toast.success("Uploaded successfully",{
+    toast.success("Uploaded successfully", {
       id: toastId,
-    })
+    });
     setLoading(false);
   };
 

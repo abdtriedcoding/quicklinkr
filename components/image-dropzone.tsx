@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/app/actions/uploadFile";
+import { useRouter } from "next/navigation";
 
 export default function ImageDropzone() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const onDrop = async (acceptedFile: File[]) => {
@@ -21,6 +23,7 @@ export default function ImageDropzone() {
           await handleFileUpload(file);
         })
       );
+      router.refresh();
       toast.success("Uploaded successfully", {
         id: toastId,
       });

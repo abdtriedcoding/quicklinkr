@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import DropzoneComponent from "react-dropzone";
+import toast from "react-hot-toast";
 
 export default function ImageDropzone() {
   const { data: session } = useSession();
@@ -34,6 +35,7 @@ export default function ImageDropzone() {
   const uploadFile = async (selectedFile: File) => {
     if (!session?.user || loading) return;
     setLoading(true);
+    const toastId = toast.loading("uploading...")
     const batch = writeBatch(db);
 
     const newFileData = {
@@ -54,6 +56,9 @@ export default function ImageDropzone() {
     const downloadURL = await getDownloadURL(imageRef);
     batch.update(docRef, { downloadURL });
     await batch.commit();
+    toast.success("Uploaded successfully",{
+      id: toastId,
+    })
     setLoading(false);
   };
 

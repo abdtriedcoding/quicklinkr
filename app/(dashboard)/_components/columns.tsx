@@ -21,7 +21,7 @@ export type FileType = {
   id: string;
   type: string;
   filename: string;
-  createdAt: Date;
+  createdAt: string;
   size: number;
   downloadURL: string;
 };
@@ -52,11 +52,7 @@ export const columns: ColumnDef<FileType>[] = [
   {
     accessorKey: "createdAt",
     cell: ({ renderValue, ...props }) => {
-      return (
-        <span className="pl-4">
-          {(renderValue() as Date).toLocaleDateString()}
-        </span>
-      );
+      return <span className="pl-4">{renderValue() as string}</span>;
     },
     header: ({ column }) => {
       return (

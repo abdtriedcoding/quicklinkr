@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +24,7 @@ const UserMenu = () => {
               <AvatarImage src={session?.user?.image!} />
             </Avatar>
             <span className="text-start font-medium line-clamp-1">
-              {session?.user.name}
+              {session?.user?.name}
             </span>
           </div>
           <ChevronsLeftRight className="rotate-90 ml-2 h-4 w-4" />
@@ -40,16 +38,16 @@ const UserMenu = () => {
       >
         <div className="flex flex-col space-y-4 p-2">
           <p className="text-xs font-medium leading-none">
-            {session?.user.email}
+            {session?.user?.email}
           </p>
           <div className="flex items-center gap-x-2">
             <div className="rounded-md bg-secondary p-1">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={session?.user.image!} />
+                <AvatarImage src={session?.user?.image!} />
               </Avatar>
             </div>
             <div className="space-y-1">
-              <p className="text-sm line-clamp-1">{session?.user.name}</p>
+              <p className="text-sm line-clamp-1">{session?.user?.name}</p>
             </div>
           </div>
         </div>

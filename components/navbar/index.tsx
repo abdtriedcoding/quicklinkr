@@ -8,20 +8,38 @@ import SignIn from "@/components/navbar/signin";
 import GetStarted from "@/components/navbar/get-started";
 import { buttonVariants } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebase-config";
+import prettyBytes from "pretty-bytes";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const [user, setUser] = useState<any>("");
+  const getUser = async () => {
+    const docRef = doc(db, `users/${session?.user.id}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setUser(docSnap.data());
+    } else {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [session]);
 
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <div className="mx-auto w-full max-w-6xl px-4">
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-          <Link href="/" className="flex z-40 font-semibold">
+          <Link href="/" className="font-semibold">
             <span>quicklinkr.</span>
           </Link>
 
-          <div className="hidden items-center space-x-4 sm:flex">
+          <div className="items-center space-x-4 flex">
             {!session?.user ? (
               <>
                 <Link
@@ -38,6 +56,9 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <p className="text-xs">
+                  {prettyBytes(user.storageUsed ?? 0)} / 1 GB
+                </p>
                 {pathname !== "/dashboard" && (
                   <Link
                     href="/dashboard"

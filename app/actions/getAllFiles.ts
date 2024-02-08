@@ -4,11 +4,11 @@ import { db } from "@/firebase/firebase-config";
 import { FileType } from "../(dashboard)/_components/columns";
 
 export const getAllFiles = async (user: UserProps) => {
-  if (!user) {
-    throw new Error("User not authenticated");
-  }
+  // if (!user) {
+  //   throw new Error("User not authenticated");
+  // }
 
-  const collectionRef = collection(db, `users/${user.id}/files`);
+  const collectionRef = collection(db, `users/${user?.id}/files`);
 
   try {
     const querySnapshot = await getDocs(

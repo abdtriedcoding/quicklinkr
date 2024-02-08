@@ -12,27 +12,27 @@ import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase-config";
-import prettyBytes from "pretty-bytes";
 import { UserProps } from "@/types";
+import prettyBytes from "pretty-bytes";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const [user, setUser] = useState<UserProps | null>();
+  const [user, setUser] = useState<UserProps>();
 
   const getUser = async () => {
     const docRef = doc(db, `users/${session?.user.id}`);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       setUser(docSnap.data() as UserProps);
-    } else {
-      return null;
     }
   };
 
   useEffect(() => {
     getUser();
   }, [session]);
+
+  const storageUsedPercentage = (user?.storageUsed ?? 0 / (1 * 1024 * 1024 * 1024)) * 100;
 
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -61,7 +61,7 @@ const Navbar = () => {
               <>
                 <div className="flex flex-col items-center space-y-1 text-xs whitespace-nowrap">
                   <p>{prettyBytes(user?.storageUsed ?? 0)} / 1 GB</p>
-                  <Progress value={33} />
+                  <Progress value={storageUsedPercentage} />
                 </div>
                 {pathname !== "/dashboard" && (
                   <Link

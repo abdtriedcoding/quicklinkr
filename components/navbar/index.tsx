@@ -1,38 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import prettyBytes from "pretty-bytes";
-import { useSession } from "next-auth/react";
-import { db } from "@/firebase/firebase-config";
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { UserProps } from "@/types";
+import NavRoutes from "./nav-routes";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 import { buttonVariants } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
-import { Progress } from "@/components/ui/progress";
 
-import UserMenu from "@/components/user-menu";
-import SignIn from "@/components/navbar/signin";
-import GetStarted from "@/components/navbar/get-started";
-
-const Navbar = () => {
-  const { data: session } = useSession();
-  const pathname = usePathname();
-  const [user, setUser] = useState<UserProps>();
-
-  const getUser = async () => {
-    const docRef = doc(db, `users/${session?.user.id}`);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setUser(docSnap.data() as UserProps);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, [session]);
-
-  const storageUsedPercentage = (user?.storageUsed ?? 0) / (1 * 1024 * 1024);
+const Navbar = async () => {
+  const user = await getCurrentUser();
 
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -43,40 +15,16 @@ const Navbar = () => {
           </Link>
 
           <div className="items-center space-x-4 flex">
-            {!session?.user ? (
-              <>
-                <Link
-                  href="/"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "sm",
-                  })}
-                >
-                  Pricing
-                </Link>
-                <SignIn />
-                <GetStarted />
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col items-center space-y-1 text-xs whitespace-nowrap">
-                  <p>{prettyBytes(user?.storageUsed ?? 0)} / 100 MB</p>
-                  <Progress value={storageUsedPercentage} />
-                </div>
-                {pathname !== "/dashboard" && (
-                  <Link
-                    href="/dashboard"
-                    className={buttonVariants({
-                      variant: "ghost",
-                      size: "sm",
-                    })}
-                  >
-                    Dashboard
-                  </Link>
-                )}
-                <UserMenu />
-              </>
-            )}
+            <Link
+              href="/"
+              className={buttonVariants({
+                variant: "ghost",
+                size: "sm",
+              })}
+            >
+              Pricing
+            </Link>
+            <NavRoutes user={user!} />
           </div>
         </div>
       </div>

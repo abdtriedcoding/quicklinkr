@@ -4,4 +4,5 @@ export interface UserProps {
   email: string;
   image: string;
   emailVerified: string | null;
+  storageUsed?: number;
 }

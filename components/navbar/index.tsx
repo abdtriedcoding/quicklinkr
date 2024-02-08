@@ -8,20 +8,23 @@ import SignIn from "@/components/navbar/signin";
 import GetStarted from "@/components/navbar/get-started";
 import { buttonVariants } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase-config";
 import prettyBytes from "pretty-bytes";
+import { UserProps } from "@/types";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const [user, setUser] = useState<any>("");
+  const [user, setUser] = useState<UserProps | null>();
+
   const getUser = async () => {
     const docRef = doc(db, `users/${session?.user.id}`);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setUser(docSnap.data());
+      setUser(docSnap.data() as UserProps);
     } else {
       return null;
     }
@@ -56,9 +59,10 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <p className="text-xs">
-                  {prettyBytes(user.storageUsed ?? 0)} / 1 GB
-                </p>
+                <div className="flex flex-col items-center space-y-1 text-xs whitespace-nowrap">
+                  <p>{prettyBytes(user?.storageUsed ?? 0)} / 1 GB</p>
+                  <Progress value={33} />
+                </div>
                 {pathname !== "/dashboard" && (
                   <Link
                     href="/dashboard"

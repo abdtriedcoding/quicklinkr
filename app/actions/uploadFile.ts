@@ -14,14 +14,14 @@ export const uploadFile = async (selectedFile: File, user: User) => {
   try {
     if (!user) return;
     const userRef = doc(db, `users/${user.id}`);
-    const userDoc = await getDoc(userRef);
+    // const userDoc = await getDoc(userRef);
 
-    // Calculate the new storageUsed by adding the size of the selected file
-    const storageUsed = userDoc?.data()?.storageUsed;
-    const newSize =
-      storageUsed !== undefined
-        ? storageUsed + selectedFile.size
-        : selectedFile.size;
+    // // Calculate the new storageUsed by adding the size of the selected file
+    // const storageUsed = userDoc?.data()?.storageUsed;
+    // const newSize =
+    //   storageUsed !== undefined
+    //     ? storageUsed + selectedFile.size
+    //     : selectedFile.size;
 
     const newFileData = {
       filename: selectedFile.name,
@@ -38,7 +38,7 @@ export const uploadFile = async (selectedFile: File, user: User) => {
     const downloadURL = await getDownloadURL(imageRef);
     batch.update(docRef, { downloadURL });
 
-    batch.update(userRef, { storageUsed: newSize });
+    // batch.update(userRef, { storageUsed: newSize });
     await batch.commit();
   } catch (error) {
     console.error("Error uploading file:", error);

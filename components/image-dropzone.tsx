@@ -4,25 +4,35 @@ import toast from "react-hot-toast";
 import DropzoneComponent from "react-dropzone";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/app/actions/uploadFile";
 import { useRouter } from "next/navigation";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebase-config";
+import { UserProps } from "@/types";
 
-export default function ImageDropzone() {
+export default function ImageDropzone({ user }: { user: UserProps }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const onDrop = async (acceptedFile: File[]) => {
+  const onDrop = async (acceptedFiles: File[]) => {
+    if (!session?.user || loading) return;
     try {
+      const userRef = doc(db, `users/${user.id}`);
       setLoading(true);
       const toastId = toast.loading("Uploading...");
+      let totalSize = 0;
+      totalSize = acceptedFiles.reduce((a, v) => (a = a + v.size), 0);
       await Promise.all(
-        acceptedFile.map(async (file) => {
-          await handleFileUpload(file);
+        acceptedFiles.map(async (file) => {
+          await uploadFile(file, user);
         })
       );
+      await updateDoc(userRef, {
+        storageUsed: (user?.storageUsed ?? 0) + totalSize,
+      });
       router.refresh();
       toast.success("Uploaded successfully", {
         id: toastId,
@@ -32,16 +42,6 @@ export default function ImageDropzone() {
       toast.error("An error occurred while uploading. Please try again later.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleFileUpload = async (selectedFile: File) => {
-    if (!session?.user || loading) return;
-    try {
-      await uploadFile(selectedFile, session.user);
-    } catch (error) {
-      console.error("Error occurred while uploading file:", error);
-      throw error;
     }
   };
 

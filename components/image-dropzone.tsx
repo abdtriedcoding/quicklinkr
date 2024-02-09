@@ -3,40 +3,49 @@
 import toast from "react-hot-toast";
 import DropzoneComponent from "react-dropzone";
 
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { uploadFile } from "@/app/actions/uploadFile";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebase-config";
+
+import { cn } from "@/lib/utils";
 import { UserProps } from "@/types";
 
+import { db } from "@/firebase/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
+import { uploadFile } from "@/app/actions/uploadFile";
+
 export default function ImageDropzone({ user }: { user: UserProps }) {
-  const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
-    if (!session?.user || loading) return;
+    if (!user || loading) return;
+    const userRef = doc(db, `users/${user.id}`);
+
     try {
-      const userRef = doc(db, `users/${user.id}`);
       setLoading(true);
       const toastId = toast.loading("Uploading...");
-      let totalSize = 0;
-      totalSize = acceptedFiles.reduce((a, v) => (a = a + v.size), 0);
+
+      // Calculate the total file size
+      const totalFileSize = acceptedFiles.reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+
+      // Upload all files concurrently
       await Promise.all(
         acceptedFiles.map(async (file) => {
           await uploadFile(file, user);
         })
       );
+
+      // Update user document with the new storage used
       await updateDoc(userRef, {
-        storageUsed: (user?.storageUsed ?? 0) + totalSize,
+        storageUsed: (user?.storageUsed ?? 0) + totalFileSize,
       });
+
+      // Refresh the router
       router.refresh();
-      toast.success("Uploaded successfully", {
-        id: toastId,
-      });
+      toast.success("Uploaded successfully", { id: toastId });
     } catch (error) {
       console.error("Error occurred while uploading:", error);
       toast.error("An error occurred while uploading. Please try again later.");

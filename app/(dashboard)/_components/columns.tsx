@@ -9,13 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { COLOR_EXTENSION_MAP } from "@/constant";
+import DeleteButton from "@/components/delete-button";
 
 export type FileType = {
   id: string;
@@ -109,8 +109,12 @@ export const columns: ColumnDef<FileType>[] = [
             >
               Copy Link
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {/* Todo---> Add delete button */}
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(file.downloadURL)}
+            >
+              Edit
+            </DropdownMenuItem>
+            <DeleteButton id={file.id} size={file.size} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

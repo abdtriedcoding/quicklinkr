@@ -1,11 +1,15 @@
 import toast from "react-hot-toast";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+
 import { db } from "@/firebase/firebase-config";
 import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
 import { UserProps } from "@/types";
+import { TrashIcon } from "lucide-react";
+import ConfirmModal from "./modals/confirm-modal";
 
 const DeleteButton = ({ id, size }: { id: string; size: number }) => {
   const { data: session } = useSession();
@@ -36,9 +40,9 @@ const DeleteButton = ({ id, size }: { id: string; size: number }) => {
   };
 
   return (
-    <>
-      <DropdownMenuItem onClick={deleteFile}>Delete</DropdownMenuItem>
-    </>
+    <ConfirmModal onConfirm={deleteFile}>
+      <TrashIcon className="w-5 h-5 cursor-pointer" />
+    </ConfirmModal>
   );
 };
 

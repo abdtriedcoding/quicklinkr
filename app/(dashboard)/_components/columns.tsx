@@ -9,6 +9,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DeleteButton from "@/components/delete-button";
 import CopyButton from "@/components/copy-button";
+import EditButton from "@/components/edit-button";
 
 export type FileType = {
   id: string;
@@ -90,6 +91,7 @@ export const columns: ColumnDef<FileType>[] = [
         <div className="flex space-x-2 items-center">
           <CopyButton downloadURL={file.downloadURL} />
           <DeleteButton id={file.id} size={file.size} />
+          <EditButton id={file.id} />
         </div>
       );
     },

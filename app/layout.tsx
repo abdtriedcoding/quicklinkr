@@ -1,14 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-import { getServerSession } from "next-auth";
-import SessionProvider from "@/components/providers/auth-provider";
-import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { Open_Sans } from "next/font/google";
 import Toast from "@/components/toast";
 
-const inter = Inter({ subsets: ["latin"] });
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import SessionProvider from "@/components/providers/auth-provider";
+import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Quicklinkr",
@@ -26,7 +29,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={openSans.className}>
           <FirebaseAuthProvider>
             <Toast />
             {children}

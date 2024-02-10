@@ -1,5 +1,5 @@
 import Navbar from "@/components/navbar";
-import Footer from "./_components/footer";
+// import Footer from "./_components/footer";
 
 export default async function MarketingLayout({
   children,
@@ -10,7 +10,7 @@ export default async function MarketingLayout({
     <>
       <Navbar />
       <main className="max-w-6xl mx-auto px-4">{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

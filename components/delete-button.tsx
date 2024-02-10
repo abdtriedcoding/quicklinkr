@@ -41,7 +41,7 @@ const DeleteButton = ({ id, size }: { id: string; size: number }) => {
 
   return (
     <ConfirmModal onConfirm={deleteFile}>
-      <TrashIcon className="w-5 h-5 cursor-pointer" />
+      <TrashIcon className="w-4 h-4 cursor-pointer" />
     </ConfirmModal>
   );
 };

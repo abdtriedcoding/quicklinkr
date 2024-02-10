@@ -8,6 +8,7 @@ import { FileIcon, defaultStyles } from "react-file-icon";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DeleteButton from "@/components/delete-button";
+import CopyButton from "@/components/copy-button";
 
 export type FileType = {
   id: string;
@@ -82,10 +83,15 @@ export const columns: ColumnDef<FileType>[] = [
     },
   },
   {
-    id: "delete",
+    id: "actions",
     cell: ({ row }) => {
       const file = row.original;
-      return <DeleteButton id={file.id} size={file.size} />;
+      return (
+        <div className="flex space-x-2 items-center">
+          <CopyButton downloadURL={file.downloadURL} />
+          <DeleteButton id={file.id} size={file.size} />
+        </div>
+      );
     },
   },
 ];

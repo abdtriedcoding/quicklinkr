@@ -1,7 +1,6 @@
 import Link from "next/link";
 import NavRoutes from "./nav-routes";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import { buttonVariants } from "@/components/ui/button";
 
 const Navbar = async () => {
   const user = await getCurrentUser();
@@ -15,15 +14,6 @@ const Navbar = async () => {
           </Link>
 
           <div className="items-center space-x-4 flex">
-            <Link
-              href="/"
-              className={buttonVariants({
-                variant: "ghost",
-                size: "sm",
-              })}
-            >
-              Pricing
-            </Link>
             <NavRoutes user={user!} />
           </div>
         </div>

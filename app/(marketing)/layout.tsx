@@ -9,7 +9,7 @@ export default async function MarketingLayout({
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4">{children}</main>
+      <main className="max-w-6xl mx-auto p-4">{children}</main>
       {/* <Footer /> */}
     </>
   );

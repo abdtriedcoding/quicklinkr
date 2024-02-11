@@ -26,14 +26,7 @@ const FeatureSection = () => {
                 Sign up for an account
               </span>
               <span className="mt-2 text-zinc-700">
-                Either starting out with a free plan or choose our{" "}
-                <Link
-                  href="/"
-                  className="text-blue-700 underline underline-offset-2"
-                >
-                  pro plan
-                </Link>
-                .
+                Now starting out with our offering free plan with a limited storage.
               </span>
             </div>
           </li>

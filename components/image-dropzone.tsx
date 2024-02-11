@@ -20,10 +20,10 @@ export default function ImageDropzone({ user }: { user: UserProps }) {
   const onDrop = async (acceptedFiles: File[]) => {
     if (!user || loading) return;
     const userRef = doc(db, `users/${user.id}`);
+    const toastId = toast.loading("Uploading...");
 
     try {
       setLoading(true);
-      const toastId = toast.loading("Uploading...");
 
       // Calculate the total file size
       const totalFileSize = acceptedFiles.reduce(
@@ -46,9 +46,8 @@ export default function ImageDropzone({ user }: { user: UserProps }) {
       // Refresh the router
       router.refresh();
       toast.success("Uploaded successfully", { id: toastId });
-    } catch (error) {
-      console.error("Error occurred while uploading:", error);
-      toast.error("An error occurred while uploading. Please try again later.");
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
     } finally {
       setLoading(false);
     }

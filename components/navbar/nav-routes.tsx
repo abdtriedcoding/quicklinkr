@@ -15,7 +15,7 @@ const NavRoutes = ({ user }: { user: UserProps }) => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
-  const storageUsedPercentage = (user?.storageUsed ?? 0) / (1 * 1024 * 1024);
+  const storageUsedPercentage = (user?.storageUsed ?? 0) / (1 * 1000 * 1000);
 
   return (
     <>

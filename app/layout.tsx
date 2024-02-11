@@ -7,11 +7,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import SessionProvider from "@/components/providers/auth-provider";
 import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
+import Navbar from "@/components/navbar";
 
 const openSans = Open_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-})
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Quicklinkr",
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <body className={openSans.className}>
           <FirebaseAuthProvider>
             <Toast />
+            <Navbar />
             {children}
           </FirebaseAuthProvider>
         </body>

@@ -4,7 +4,7 @@ import Image from "next/image";
 const FeatureSection = () => {
   return (
     <>
-      <div className="mx-auto mb-32 mt-32 sm:mt-56">
+      <div className="mx-auto mt-32 sm:mt-56">
         <div className="mb-12">
           <div className="mx-auto max-w-4xl sm:text-center">
             <h2 className="mt-2 font-bold text-4xl text-gray-900 sm:text-5xl">
@@ -56,7 +56,7 @@ const FeatureSection = () => {
         </ol>
 
         <div className="mt-16 flow-root sm:mt-24">
-          <div className="rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl lg:p-4">
+          <div className="rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl">
             <Image
               src="/file-upload-preview.png"
               alt="uploading preview"

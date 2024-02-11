@@ -1,5 +1,3 @@
-import Navbar from "@/components/navbar";
-
 export default async function DashBoardLayout({
   children,
 }: Readonly<{
@@ -7,8 +5,7 @@ export default async function DashBoardLayout({
 }>) {
   return (
     <>
-      <Navbar />
-      <main className="max-w-6xl mx-auto p-4">{children}</main>
+      <main className="max-w-6xl mx-auto pt-20 pb-4">{children}</main>
     </>
   );
 }

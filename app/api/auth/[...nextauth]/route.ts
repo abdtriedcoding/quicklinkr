@@ -5,7 +5,7 @@ import { FirestoreAdapter } from "@auth/firebase-adapter";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   callbacks: {
     session: async ({ session, token }) => {

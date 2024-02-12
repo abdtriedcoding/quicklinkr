@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/firebase/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { UserProps } from "@/types";
+import { authOptions } from "@/lib/auth";
 
 export async function getSession() {
   return await getServerSession(authOptions);

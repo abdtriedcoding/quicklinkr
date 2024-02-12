@@ -1,12 +1,12 @@
 import "./globals.css";
 import { Open_Sans } from "next/font/google";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import { constructMetadata } from "@/lib/utils";
 import SessionProvider from "@/components/providers/auth-provider";
 import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
 import Navbar from "@/components/navbar";
 import Toast from "@/components/toast";
+import { authOptions } from "@/lib/auth";
 
 const openSans = Open_Sans({
   subsets: ["latin"],

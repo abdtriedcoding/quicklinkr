@@ -1,24 +1,19 @@
 import "./globals.css";
-import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import Toast from "@/components/toast";
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { constructMetadata } from "@/lib/utils";
 import SessionProvider from "@/components/providers/auth-provider";
 import FirebaseAuthProvider from "@/components/providers/firebase-auth-provider";
 import Navbar from "@/components/navbar";
+import Toast from "@/components/toast";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Quicklinkr",
-  description:
-    "An application for effortless media uploads, providing secure URLs for seamless sharing and integration.",
-};
+export const metadata = constructMetadata();
 
 export default async function RootLayout({
   children,

@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
 // Fixed metadata.
 export function constructMetadata({
   title = "Quicklinkr",

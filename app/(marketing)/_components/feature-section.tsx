@@ -11,7 +11,7 @@ const FeatureSection = () => {
               Start creating link in seconds
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Creating shearable links of your documents has never been easier
+              Creating shareable links of your documents has never been easier
               than with Quicklinkr.
             </p>
           </div>
@@ -26,7 +26,8 @@ const FeatureSection = () => {
                 Sign up for an account
               </span>
               <span className="mt-2 text-zinc-700">
-                Now starting out with our offering free plan with a limited storage.
+                Now starting out with our offering free plan with a limited
+                storage.
               </span>
             </div>
           </li>
@@ -37,7 +38,7 @@ const FeatureSection = () => {
                 Upload your media files
               </span>
               <span className="mt-2 text-zinc-700">
-                We&apos;ll process your file and make a shearable link for you.
+                We&apos;ll process your file and make a shareable link for you.
               </span>
             </div>
           </li>
